@@ -26,6 +26,8 @@ public class Day1 {
 	}
 
 	public static void main(String[] args) {
+		int pointer = 50;
+
 		try {
 			List<String> lines = readFile("input.txt");
 			for (String line : lines) {
