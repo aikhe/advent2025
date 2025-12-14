@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+record RotationValue(char direction, int steps) {
+}
+
 public class Day1 {
 	public static void main(String[] args) {
 		Rotation rotation = new Rotation("input.txt");
@@ -11,7 +14,10 @@ public class Day1 {
 		try {
 			List<String> lines = rotation.parseFile();
 			for (String line : lines) {
-				System.out.println(line);
+				RotationValue value = rotation.parseLine(line);
+
+				System.out.println(
+						"Direction: " + value.direction() + ", Steps: " + value.steps());
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("[Error] File not found: " + e.getMessage());
@@ -21,7 +27,7 @@ public class Day1 {
 
 class Rotation {
 	private String fileName;
-	private int pointer = 50;
+	// private int pointer = 50;
 
 	public Rotation(String fileName) {
 		this.fileName = fileName;
@@ -46,7 +52,18 @@ class Rotation {
 		return lines;
 	}
 
-	// public static String parseInput(String input) {
+	public RotationValue parseLine(String input) {
+		char direction = input.charAt(0);
+		int steps = Integer.parseInt(input.substring(1));
+
+		return new RotationValue(direction, steps);
+	}
+
+	// public static String calcRight(String input) {
+	//
+	// }
+	//
+	// public static String calcLeft(String input) {
 	//
 	// }
 }
