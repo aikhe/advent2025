@@ -9,16 +9,12 @@ record RotationValue(char direction, int steps) {
 
 public class Day1 {
 	public static void main(String[] args) {
-		Rotation rotation = new Rotation("input.txt");
+		System.out.println("The dial starts by pointing at 50.");
 
 		try {
-			List<String> lines = rotation.parseFile();
-			for (String line : lines) {
-				RotationValue value = rotation.parseLine(line);
+			Rotation rotation = new Rotation("input.txt", 50, 100);
 
-				System.out.println(
-						"Direction: " + value.direction() + ", Steps: " + value.steps());
-			}
+			rotation.run();
 		} catch (FileNotFoundException e) {
 			System.out.println("[Error] File not found: " + e.getMessage());
 		}
@@ -26,19 +22,38 @@ public class Day1 {
 }
 
 class Rotation {
-	private String fileName;
-	// private int pointer = 50;
+	private final String fileName;
+	private int pointer;
+	private final int cap;
+	private int zero_count;
 
-	public Rotation(String fileName) {
+	public Rotation(String fileName, int pointer, int cap) {
 		this.fileName = fileName;
+		this.pointer = pointer;
+		this.cap = cap;
 	}
 
-	/**
-	 * Reads all lines from a file and returns them as a List of Strings.
-	 *
-	 * @return List of lines in the file
-	 * @throws FileNotFoundException if the file cannot be read
-	 */
+	public void run() throws FileNotFoundException {
+		List<String> lines = parseFile();
+		for (String line : lines) {
+			RotationValue value = parseLine(line);
+
+			if (value.direction() == 'R') {
+				pointer = calcRight(value.steps());
+			} else if (value.direction() == 'L') {
+				pointer = calcLeft(value.steps());
+			}
+
+			if (pointer == 0) {
+				zero_count++;
+			}
+
+			System.out.println("The dial is rotated " + value.direction() + value.steps() + " to point at " + pointer);
+		}
+
+		System.out.println("Total zero: " + zero_count);
+	}
+
 	public List<String> parseFile() throws FileNotFoundException {
 		List<String> lines = new ArrayList<>();
 		File file = new File(fileName);
@@ -59,11 +74,15 @@ class Rotation {
 		return new RotationValue(direction, steps);
 	}
 
-	// public static String calcRight(String input) {
-	//
-	// }
-	//
-	// public static String calcLeft(String input) {
-	//
-	// }
+	public int calcRight(int steps) {
+		return (pointer + steps) % cap;
+	}
+
+	public int calcLeft(int steps) {
+		int val = (pointer - steps) % cap;
+		if (val < 0)
+			val += cap;
+
+		return val;
+	}
 }
