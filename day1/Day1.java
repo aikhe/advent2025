@@ -26,6 +26,7 @@ class Rotation {
 	private int pointer;
 	private final int cap;
 	private int zero_count;
+	private int points;
 
 	public Rotation(String fileName, int pointer, int cap) {
 		this.fileName = fileName;
@@ -51,7 +52,8 @@ class Rotation {
 			System.out.println("The dial is rotated " + value.direction() + value.steps() + " to point at " + pointer);
 		}
 
-		System.out.println("Total zero: " + zero_count);
+		System.out.println("Total zero: " + zero_count + ", Points: " + points);
+		System.out.println("All: " + (zero_count + points));
 	}
 
 	public List<String> parseFile() throws FileNotFoundException {
@@ -75,13 +77,18 @@ class Rotation {
 	}
 
 	public int calcRight(int steps) {
+		int point = (pointer + steps) / cap;
+		points = points + point;
+
 		return (pointer + steps) % cap;
 	}
 
 	public int calcLeft(int steps) {
 		int val = (pointer - steps) % cap;
-		if (val < 0)
+		while (val < 0) {
 			val += cap;
+			points++;
+		}
 
 		return val;
 	}
