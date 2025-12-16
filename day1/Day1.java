@@ -57,52 +57,48 @@ class Rotation {
 		System.out.println("Part 2 (Total Points): " + pointsVal);
 	}
 
-	public List<String> parseFile() throws FileNotFoundException {
+	private List<String> parseFile() throws FileNotFoundException {
 		List<String> lines = new ArrayList<>();
 		File file = new File(fileName);
+		Scanner scanner = new Scanner(file);
 
-		try (Scanner scanner = new Scanner(file)) {
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine().trim();
-				if (!line.isEmpty()) {
-					lines.add(line);
-				}
-			}
+		while (scanner.hasNextLine()) {
+			String line = scanner.nextLine().trim();
+			lines.add(line);
 		}
 
+		scanner.close();
 		return lines;
 	}
 
-	public RotationValue parseLine(String input) {
+	private RotationValue parseLine(String input) {
 		char direction = input.charAt(0);
 		int steps = Integer.parseInt(input.substring(1));
 
 		return new RotationValue(direction, steps);
 	}
 
-	public int calcRight(int steps) {
+	private int calcRight(int steps) {
 		// add points for every loops
 		pointsVal += (pointer + steps) / cap;
 
 		return (pointer + steps) % cap;
 	}
 
-	public int calcLeft(int steps) {
-		int nextStep = steps;
-
+	private int calcLeft(int steps) {
 		// total distance to reach 0
 		int distance = (pointer == 0) ? cap : pointer;
 
 		// once confident to reach 0 then add points
-		if (nextStep >= distance) {
+		if (steps >= distance) {
 			pointsVal++;
-			nextStep -= distance;
+			steps -= distance;
 
 			// add points for additional loops
-			pointsVal += nextStep / cap;
+			pointsVal += steps / cap;
 		}
 
-		// if nextStep is not enough then loop again
+		// if nextStep is not enough then just add it to pointer
 		int result = (pointer - steps) % cap;
 		if (result < 0) {
 			result += cap;
