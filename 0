@@ -27,16 +27,15 @@ class Range {
 	public void run() throws FileNotFoundException {
 		List<String> ranges = parseFile();
 
+		int id = 0;
 		for (String range : ranges) {
-			RangeValue rangeValues = parseRange(range);
-
-			for (int i = rangeValues.initial(); i <= rangeValues.last(); i++) {
-				if (checkIfRepeatedTwice(String.valueOf(i))) {
-					System.out.println("Number: " + i + ", Valid Range");
-				} else {
-					System.out.println("Number: " + i + ", Invalid Range");
-				}
+			if (checkIfRepeatedTwice(range)) {
+				System.out.println("Range " + id + ": " + range + ", yes");
+			} else {
+				System.out.println("Range " + id + ": " + range + ", no");
 			}
+
+			id++;
 		}
 	}
 
@@ -57,7 +56,7 @@ class Range {
 	}
 
 	private RangeValue parseRange(String range) {
-		String[] parts = range.split("-");
+		String[] parts = range.split("-"); // split by the dash
 
 		int initial = Integer.parseInt(parts[0].trim());
 		int last = Integer.parseInt(parts[1].trim());
