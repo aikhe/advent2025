@@ -3,6 +3,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+// import java.util.HashMap;
+// import java.util.Map;
 
 record RangeValue(long initial, long last) {
 }
@@ -14,8 +16,8 @@ public class Day2 {
 	public static void main(String[] args) throws FileNotFoundException {
 		System.out.println("Hello, Day 2!");
 
-		Range range = new Range("input.txt");
-		// Range range = new Range("sample-input.txt");
+		// Range range = new Range("input.txt");
+		Range range = new Range("sample-input.txt");
 		range.run();
 	}
 }
@@ -36,26 +38,27 @@ class Range {
 
 			for (long num = rangeValues.initial(); num <= rangeValues.last(); num++) {
 				// checks if number has two sequence
-				if (checkIfRepeatedTwice(String.valueOf(num))) {
+				if (checkIfCanSlice(String.valueOf(num))) {
 					Split splitValues = splitNumber(String.valueOf(num));
 
 					// now test if both sequence are equal
 					if (splitValues.firstSlice().equals(splitValues.secondSlice())) {
 						System.out.println("Number: " + num + ", " + splitValues.firstSlice() + "-" + splitValues.secondSlice()
-								+ ", Valid Range | " + "" + "Valid ID");
+								+ ", Even Range | " + "" + "Invalid ID");
 
 						total += num;
 					} else {
 						System.out.println("Number: " + num + ", " + splitValues.firstSlice() + "-" + splitValues.secondSlice()
-								+ ", Valid Range | " + "" + "Invalid ID");
+								+ ", Even Range | " + "" + "Valid ID");
 					}
 				} else {
-					System.out.println("Number: " + num + ", Invalid Range");
+
+					System.out.println("Number: " + num + ", Odd Range");
 				}
 			}
 		}
 
-		System.out.println("Total: " + total);
+		System.out.println("Total Invalid ID: " + total);
 	}
 
 	private List<String> parseFile() throws FileNotFoundException {
@@ -82,7 +85,7 @@ class Range {
 		return new RangeValue(initial, last);
 	}
 
-	private boolean checkIfRepeatedTwice(String range) {
+	private boolean checkIfCanSlice(String range) {
 		if (range.length() % 2 == 0) {
 			return true;
 		} else {
@@ -91,7 +94,18 @@ class Range {
 	}
 
 	private Split splitNumber(String num) {
+		// Map<Integer, String> slices = new HashMap<>();
 		int mid = num.length() / 2;
+		System.out.println("mid " + mid);
+
+		for (int i = 1; i <= mid; i++) {
+			int sequencePointer;
+			System.out.println("sequence num " + i);
+
+			for (int j = 1; j <= num.length(); j += i) {
+				System.out.println("sequence " + j);
+			}
+		}
 
 		return new Split(num.substring(0, mid), num.substring(mid));
 	}
