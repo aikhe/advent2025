@@ -45,20 +45,20 @@ class Range {
 				Map<Integer, List<String>> splitValues = splitNumber(String.valueOf(num));
 
 				for (Map.Entry<Integer, List<String>> sequences : splitValues.entrySet()) {
-					// System.out.print("Key: " + sequences.getKey() + ", Values: " +
-					// sequences.getValue());
+					System.out.print("Key: " + sequences.getKey() + ", Values: " +
+							sequences.getValue());
 
 					if (sequences.getValue().stream().distinct().count() == 1) {
 						totalInvalidID += num;
 
-						// System.out.println(", Invalid Range");
+						System.out.println(", Invalid Range");
 						break;
 					} else {
-						// System.out.println(", Valid Range");
+						System.out.println(", Valid Range");
 					}
 				}
 
-				// System.out.println(splitValues);
+				System.out.println(splitValues);
 			}
 		}
 
@@ -90,9 +90,12 @@ class Range {
 	}
 
 	private Map<Integer, List<String>> splitNumber(String num) {
+		// hashmap for every possible combination (num: slices)
 		Map<Integer, List<String>> slices = new HashMap<>();
-		int mid = num.length() / 2;
+		int mid = num.length() / 2; // mid is the possible sequence combination
 
+		// iterate for each possible combination e.g by 1, 2, 3, ... until num half is
+		// reached
 		for (int sequenceNum = 1; sequenceNum <= mid; sequenceNum++) {
 			int sequencePointer = 0;
 
@@ -101,6 +104,7 @@ class Range {
 				continue;
 			}
 
+			// add each slice to the hashmap
 			for (sequencePointer = 0; sequencePointer + sequenceNum <= num.length(); sequencePointer += sequenceNum) {
 				slices.computeIfAbsent(sequenceNum, k -> new ArrayList<>())
 						.add(num.substring(sequencePointer, sequencePointer + sequenceNum));
